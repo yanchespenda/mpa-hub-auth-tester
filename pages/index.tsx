@@ -67,7 +67,7 @@ axios.interceptors.request.use(async (config) => {
 }, null)
 
 export default function Home() {
-  const [cookies] = useCookies([COOKIE_TOKEN, COOKIE_REFRESH_TOKEN])
+  const [cookies, _, removeCookie] = useCookies([COOKIE_TOKEN, COOKIE_REFRESH_TOKEN])
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [user, setUser] = useState<ResponseMe | null>(null)
 
@@ -83,7 +83,12 @@ export default function Home() {
     }
   }, [cookies]);
 
-  
+  const logout = () => {
+    removeCookie(COOKIE_TOKEN, { path: '/' })
+    removeCookie(COOKIE_REFRESH_TOKEN, { path: '/' })
+    setIsLoggedIn(false)
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -106,7 +111,9 @@ export default function Home() {
                 ID: {user.data.id}<br />
                 Name: {user.data.name}<br />
                 Email: {user.data.email}<br />
-                Role: {user.data.role}<br />
+                Role: {user.data.role}<br /><br /><br />
+
+                <button onClick={() => logout()}>Click here to logout</button>
               </Fragment>
             ) : null}
           </Fragment>

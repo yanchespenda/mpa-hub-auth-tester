@@ -35,7 +35,7 @@ const COOKIE_DOMAIN = '.myponyasia.com'
 axios.interceptors.request.use(async (config) => {
 
   if (cookies.get(COOKIE_TOKEN)) {
-    config.headers.Authorization = cookies.get(COOKIE_TOKEN)
+    config.headers.Authorization = `Bearer ${cookies.get(COOKIE_TOKEN)}`
   } else if (cookies.get(COOKIE_REFRESH_TOKEN)) {
     try {
       const response = await axios.post<RefreshToken>(`${BaseUrl}/oauth/refresh-token`, null, {
